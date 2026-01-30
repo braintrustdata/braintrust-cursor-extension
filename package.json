@@ -1,0 +1,46 @@
+{
+  "name": "braintrust",
+  "displayName": "Braintrust",
+  "description": "Connect Cursor to Braintrust for AI-powered access to your projects, experiments, and logs",
+  "version": "0.0.1",
+  "publisher": "braintrustdata",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/braintrustdata/cursor-extension"
+  },
+  "homepage": "https://braintrust.dev",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "braintrust",
+    "mcp",
+    "ai",
+    "cursor"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {},
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -watch",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish:vscode": "vsce publish",
+    "publish:openvsx": "ovsx publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.0.0",
+    "ovsx": "^0.9.0",
+    "typescript": "^5.3.0"
+  }
+}
