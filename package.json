@@ -2,12 +2,12 @@
   "name": "braintrust",
   "displayName": "Braintrust",
   "description": "Connect Cursor to Braintrust for AI-powered access to your projects, experiments, and logs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "braintrustdata",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/braintrustdata/cursor-extension"
+    "url": "https://github.com/braintrustdata/braintrust-cursor-extension"
   },
   "homepage": "https://braintrust.dev",
   "icon": "icon.png",
