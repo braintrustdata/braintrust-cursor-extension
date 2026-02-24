@@ -1,26 +1,43 @@
-# Braintrust MCP Extension for Cursor
+# Braintrust for Cursor
 
-A Cursor extension that automatically connects the Braintrust MCP server, giving Cursor's AI assistant access to your Braintrust projects, experiments, and logs.
+Connect Cursor to [Braintrust](https://braintrust.dev), giving Cursor's AI assistant access to your projects, experiments, and logs via MCP.
+
+This repo provides two ways to install:
+
+- **[Cursor Plugin](#install-as-plugin)** — lightweight MCP config, installed via the Cursor Marketplace
+- **[VS Code Extension](#install-as-extension)** — auto-registers the MCP server on startup via the Cursor Extension API
 
 ## Prerequisites
 
 - [Cursor](https://cursor.com)
 - A [Braintrust](https://braintrust.dev) API key
 
-## Installation
+## Install as Plugin
 
-Install from the Cursor extension marketplace:
+Install from the [Cursor Marketplace](https://cursor.com/marketplace):
+
+1. Open Cursor
+2. Run `/add-plugin` and search for "Braintrust", or install from `cursor.com/marketplace`
+3. Set the `BRAINTRUST_API_KEY` environment variable (see [Setup](#set-your-api-key))
+
+The plugin adds the Braintrust MCP server to your Cursor environment. No build step required.
+
+## Install as Extension
+
+Install from the Cursor extension panel:
 
 1. Open Cursor
 2. Go to Extensions (`Cmd+Shift+X` / `Ctrl+Shift+X`)
 3. Search for "Braintrust"
 4. Click Install
 
+The extension automatically registers the Braintrust MCP server when Cursor starts.
+
 ## Setup
 
-### 1. Set your API key
+### Set your API key
 
-The extension reads your API key from the `BRAINTRUST_API_KEY` environment variable. Set this **before** launching Cursor.
+Both the plugin and extension read your API key from the `BRAINTRUST_API_KEY` environment variable. Set this **before** launching Cursor.
 
 #### macOS / Linux
 
@@ -42,19 +59,6 @@ Set the environment variable via System Properties > Environment Variables, or i
 
 Then restart PowerShell and Cursor.
 
-### 2. Add Braintrust as a trusted domain
-
-To allow the extension to authenticate without OAuth prompts:
-
-1. Open Cursor Settings (`Cmd+,` / `Ctrl+,`)
-2. Search for "trusted domains"
-3. Add `braintrust.dev` to the list of trusted domains
-4. Restart Cursor
-
-## Usage
-
-Once the extension is installed and `BRAINTRUST_API_KEY` is set, the Braintrust MCP server is automatically registered when Cursor starts. No manual steps required.
-
 ## Troubleshooting
 
 ### "BRAINTRUST_API_KEY is not set"
@@ -65,7 +69,7 @@ Once the extension is installed and `BRAINTRUST_API_KEY` is set, the Braintrust 
 
 ### Extension doesn't seem to work
 
-- This extension only works in Cursor, not vanilla VS Code
+- The extension only works in Cursor, not vanilla VS Code
 - Ensure you're running a recent version of Cursor that supports the MCP Extension API
 
 ## Contributing

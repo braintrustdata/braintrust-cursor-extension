@@ -1,0 +1,12 @@
+src/**
+.vscode/**
+.cursor-plugin/**
+mcp.json
+logo.svg
+tsconfig.json
+CONTRIBUTING.md
+.gitignore
+**/*.ts
+**/*.map
+node_modules/**
+.vscode-test/**

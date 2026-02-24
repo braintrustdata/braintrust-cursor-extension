@@ -1,0 +1,15 @@
+{
+  "name": "braintrust",
+  "displayName": "Braintrust",
+  "version": "0.0.2",
+  "description": "Connect Cursor to Braintrust for AI-powered access to your projects, experiments, and evaluation logs",
+  "author": {
+    "name": "Braintrust Data, Inc.",
+    "email": "support@braintrust.dev"
+  },
+  "homepage": "https://braintrust.dev",
+  "repository": "https://github.com/braintrustdata/braintrust-cursor-extension",
+  "license": "MIT",
+  "keywords": ["braintrust", "mcp", "ai", "evaluation", "experiments", "observability", "logs"],
+  "logo": "logo.svg"
+}
