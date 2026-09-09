@@ -1,8 +1,9 @@
 import * as vscode from "vscode";
 
 const SERVER_NAME = "braintrust";
-const SERVER_URL = "https://api.braintrust.dev/mcp";
+const DEFAULT_API_URL = "https://api.braintrust.dev";
 const ENV_VAR_NAME = "BRAINTRUST_API_KEY";
+const API_URL_ENV_VAR_NAME = "BRAINTRUST_API_URL";
 
 /**
  * Returns the Cursor MCP API if available, otherwise null.
@@ -27,6 +28,12 @@ function getApiKey(): string | null {
   return apiKey;
 }
 
+function getServerUrl(): string {
+  const apiUrl =
+    process.env[API_URL_ENV_VAR_NAME]?.trim() || DEFAULT_API_URL;
+  return `${apiUrl.replace(/\/+$/, "")}/mcp`;
+}
+
 export function activate(_context: vscode.ExtensionContext): void {
   const mcpApi = getCursorMcpApi();
   if (!mcpApi) {
@@ -45,7 +52,7 @@ export function activate(_context: vscode.ExtensionContext): void {
     mcpApi.registerServer({
       name: SERVER_NAME,
       server: {
-        url: SERVER_URL,
+        url: getServerUrl(),
         headers: {
           Authorization: `Bearer ${apiKey}`,
         },
