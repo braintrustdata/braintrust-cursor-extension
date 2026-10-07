@@ -3,7 +3,7 @@
     "braintrust": {
       "url": "https://api.braintrust.dev/mcp",
       "headers": {
-        "Authorization": "Bearer ${env:BRAINTRUST_API_KEY}"
+        "Authorization": "Bearer ${BRAINTRUST_API_KEY}"
       }
     }
   }

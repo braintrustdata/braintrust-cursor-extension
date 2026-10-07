@@ -1,81 +1,116 @@
-# Braintrust for Cursor
+# Braintrust tracing for Cursor
 
-Connect Cursor to [Braintrust](https://braintrust.dev), giving Cursor's AI assistant access to your projects, experiments, and logs via MCP.
+> **This repository is generated.** It is built from
+> [braintrustdata/braintrust-coding-agent-plugins](https://github.com/braintrustdata/braintrust-coding-agent-plugins).
+> Make changes there; releases publish the generated plugin to this repository.
 
-This repo provides two ways to install:
-
-- **[Cursor Plugin](#install-as-plugin)** — lightweight MCP config, installed via the Cursor Marketplace
-- **[VS Code Extension](#install-as-extension)** — auto-registers the MCP server on startup via the Cursor Extension API
+Connect Cursor to [Braintrust](https://braintrust.dev) through MCP and trace
+agent sessions with the `braintrust` plugin. The same repository also contains
+the Braintrust VS Code extension for Cursor.
 
 ## Prerequisites
 
-- [Cursor](https://cursor.com)
-- A [Braintrust](https://braintrust.dev) API key
+- A [Braintrust account](https://braintrust.dev)
+- Cursor with the CLI or desktop app
+- The [Braintrust CLI](https://www.braintrust.dev/docs/reference/cli/quickstart)
+- A Braintrust API key to use the MCP server
 
-## Install as Plugin
+## Install from Cursor Marketplace
 
-Install from the [Cursor Marketplace](https://cursor.com/marketplace):
+Use `/add-plugin` in Cursor and search for **Braintrust**, or install from the
+[Cursor Marketplace](https://cursor.com/marketplace). The plugin registers the
+Braintrust MCP server and tracing hooks. For tracing, install and authenticate
+the `bt` CLI, then run `bt trace enable cursor --project my-coding-agent`.
 
-1. Open Cursor
-2. Run `/add-plugin` and search for "Braintrust", or install from `cursor.com/marketplace`
-3. Set the `BRAINTRUST_API_KEY` environment variable (see [Setup](#set-your-api-key))
+The Braintrust MCP server uses `https://api.braintrust.dev/mcp`. Configure its
+`BRAINTRUST_API_KEY` variable in Cursor's plugin settings. MCP access and tracing
+use separate authentication: `bt login` authenticates the tracing CLI.
 
-The plugin adds the Braintrust MCP server to your Cursor environment. No build step required.
+The existing VS Code extension remains available from Cursor's extension
+panel. It reads `BRAINTRUST_API_KEY` from Cursor's environment and registers
+the same MCP server through Cursor's extension API. If
+both the extension and plugin are installed, each attempts to register a
+server named `braintrust`; use one MCP installation to avoid duplicates.
 
-## Install as Extension
+## Supported Cursor surfaces
 
-Install from the Cursor extension panel:
+The plugin works with Cursor CLI and desktop.
+Its hooks invoke `bt trace hook` directly, so the Braintrust CLI must be on
+Cursor's `PATH` when hooks run.
 
-1. Open Cursor
-2. Go to Extensions (`Cmd+Shift+X` / `Ctrl+Shift+X`)
-3. Search for "Braintrust"
-4. Click Install
+## Quickstart
 
-The extension automatically registers the Braintrust MCP server when Cursor starts.
-
-## Setup
-
-### Set your API key
-
-Both the plugin and extension read your API key from the `BRAINTRUST_API_KEY` environment variable. Set this **before** launching Cursor.
-
-#### macOS / Linux
-
-Add to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
+Authenticate and enable tracing:
 
 ```bash
-export BRAINTRUST_API_KEY="your-api-key-here"
+bt login
+bt trace enable cursor --project my-coding-agent
 ```
 
-Then restart your terminal and Cursor.
+Setup installs or refreshes the local `braintrust` plugin, configures the hooks
+needed to trace Cursor sessions, and saves the selected route in
+`~/.cursor/braintrust.json`.
+Cursor must allow local plugin imports. Reload the Cursor window after setup so
+the plugin is active.
 
-#### Windows
+Use `--profile` or `--org` to select a different Braintrust account or
+organization. To use MCP, configure `BRAINTRUST_API_KEY` in Cursor's plugin settings.
 
-Set the environment variable via System Properties > Environment Variables, or in PowerShell:
+## Data handling
 
-```powershell
-[Environment]::SetEnvironmentVariable("BRAINTRUST_API_KEY", "your-api-key-here", "User")
+Tracing sends Cursor's available session, prompt, response, and tool information
+to Braintrust. Depending on what Cursor provides, this can include prompts,
+assistant responses, tool inputs and results, and session metadata. Transcript
+imports contain less information than live tracing and may omit tool details.
+
+Captured content can include confidential instructions, file contents, or
+secrets. The plugin does not redact content locally. Configure Braintrust's
+content-redaction controls before enabling tracing, and don't trace content
+that must not be sent to Braintrust.
+
+## Additional root metadata
+
+Add a JSON object to the root span of every Cursor session:
+
+```bash
+bt trace enable cursor --project my-coding-agent \
+  --additional-metadata '{"team":"platform","environment":"dev"}'
 ```
 
-Then restart PowerShell and Cursor.
+Standard session metadata takes precedence if keys conflict.
 
-## Troubleshooting
+## Root-span tags
 
-### "BRAINTRUST_API_KEY is not set"
+Use repeatable `--tag` options for filterable tags on root spans:
 
-- Verify the variable is set: `echo $BRAINTRUST_API_KEY` (macOS/Linux) or `echo %BRAINTRUST_API_KEY%` (Windows)
-- Cursor must be **restarted** after setting environment variables
-- On macOS, launching Cursor from Spotlight/Dock may not inherit shell variables — launch from terminal instead
+```bash
+bt trace enable cursor --tag ci --tag release-validation
+bt trace run cursor --tag ci
+bt trace import cursor SESSION_ID --tag historical-import
+```
 
-### Extension doesn't seem to work
+## One-off runs and transcript import
 
-- The extension only works in Cursor, not vanilla VS Code
-- Ensure you're running a recent version of Cursor that supports the MCP Extension API
+```bash
+bt trace run --project my-coding-agent cursor
+bt trace import cursor SESSION_ID
+bt trace import cursor SESSION_ID --attach
+```
 
-## Contributing
+`run` traces one Cursor invocation without changing saved settings. Import reads
+a saved Cursor transcript; `--attach` follows it until Ctrl-C. Imports include
+conversation text and the final recorded turn status. They omit tool activity
+and usage, and session timing may be approximate. Cursor may retain only the
+latest turn in a transcript.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and build instructions.
+Managed Cursor runs require interactive CLI mode. Cursor's `-p`/`--print` mode
+does not provide the full lifecycle needed for a complete trace.
 
-## License
+## Manage tracing
 
-MIT
+```bash
+bt trace doctor cursor
+bt trace status
+bt trace update cursor
+bt trace disable cursor
+```

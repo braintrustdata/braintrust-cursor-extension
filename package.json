@@ -2,7 +2,7 @@
   "name": "braintrust",
   "displayName": "Braintrust",
   "description": "Connect Cursor to Braintrust for AI-powered access to your projects, experiments, and logs",
-  "version": "0.0.2",
+  "version": "0.3.0",
   "publisher": "braintrustdata",
   "license": "MIT",
   "repository": {

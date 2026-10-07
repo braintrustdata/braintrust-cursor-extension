@@ -1,29 +1,40 @@
 # Contributing
 
+The source for this plugin and extension lives in
+[braintrust-coding-agent-plugins](https://github.com/braintrustdata/braintrust-coding-agent-plugins)
+under `src/plugins/cursor/content/`. The
+[braintrust-cursor-extension](https://github.com/braintrustdata/braintrust-cursor-extension)
+repository is generated from this directory during a release. Make changes and
+open pull requests in the monorepo.
+
 ## Development Setup
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20.18.1 or newer
 - npm
 
 ### Build from Source
 
 ```bash
-# Clone the repository
-git clone https://github.com/braintrustdata/cursor-extension.git
-cd cursor-extension
+# Clone the source repository
+git clone https://github.com/braintrustdata/braintrust-coding-agent-plugins.git
+cd braintrust-coding-agent-plugins/src/plugins/cursor/content
 
 # Install dependencies
-npm install
+npm ci
 
 # Build the extension
 npm run build
 ```
 
+From the monorepo root, run `make validate-cursor` to build and validate the
+Cursor distribution tree, including its plugin manifest, MCP configuration,
+and tracing hooks.
+
 ### Running in Development
 
-1. Open this folder in Cursor
+1. Open `src/plugins/cursor/content/` in Cursor
 2. Press `F5` to launch the Extension Development Host
 3. A new Cursor window will open with the extension loaded
 
@@ -83,7 +94,7 @@ For persistent configuration, use System Properties > Environment Variables.
 
 ### Installing a Local Build
 
-1. Build the extension: `npm run build`
+1. From `src/plugins/cursor/content/`, build the extension: `npm run build`
 2. Package it: `npx vsce package` (produces a `.vsix` file)
 3. In Cursor, open Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`)
 4. Run **Extensions: Install from VSIX...**
@@ -92,7 +103,10 @@ For persistent configuration, use System Properties > Environment Variables.
 ## Project Structure
 
 ```
-cursor-extension/
+braintrust-coding-agent-plugins/src/plugins/cursor/content/
+├── .cursor-plugin/     # Cursor plugin manifest
+├── hooks/              # Tracing hooks
+├── mcp.json            # Braintrust MCP server
 ├── package.json        # Extension manifest
 ├── tsconfig.json       # TypeScript configuration
 ├── src/
@@ -112,28 +126,11 @@ cursor-extension/
 
 ## Publishing
 
-Cursor uses [OpenVSX](https://open-vsx.org), not the VS Code Marketplace. You need to publish to OpenVSX for extensions to appear in Cursor.
+The monorepo's **Release Plugin** workflow prepares a version pull request.
+After that pull request is approved and merged, the workflow publishes the
+generated Cursor plugin tree to `braintrustdata/braintrust-cursor-extension`.
+The version script updates the Cursor plugin manifest, `package.json`, and
+`package-lock.json` together. Do not edit the distribution repository directly.
 
-### First-time setup (OpenVSX)
-
-1. Sign in at https://open-vsx.org with GitHub
-2. Get an access token from https://open-vsx.org/user-settings/tokens
-3. Create the namespace (one-time):
-   ```bash
-   npx ovsx create-namespace braintrustdata -p <your-token>
-   ```
-
-### Publishing a release
-
-1. Update the version in `package.json`
-2. Build and publish to OpenVSX:
-   ```bash
-   npm run build
-   npx ovsx publish -p <your-token>
-   ```
-
-Or to package without publishing (for testing):
-```bash
-npm run package
-# creates braintrust-x.x.x.vsix
-```
+Publishing the VS Code extension to an extension marketplace is a separate
+release action. `npm run package` creates a `.vsix` file for local testing.

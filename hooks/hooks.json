@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "sessionEnd": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "postToolUseFailure": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "afterMCPExecution": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "preCompact": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "stop": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "afterAgentResponse": [
+      {
+        "command": "bt trace hook --source cursor --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ]
+  }
+}
