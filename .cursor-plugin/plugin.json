@@ -1,7 +1,7 @@
 {
   "name": "braintrust",
   "displayName": "Braintrust",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Connect Cursor to Braintrust MCP and trace agent sessions.",
   "author": { "name": "Braintrust Data, Inc.", "email": "support@braintrust.dev" },
   "homepage": "https://braintrust.dev",
