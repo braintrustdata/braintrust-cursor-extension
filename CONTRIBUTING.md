@@ -11,7 +11,7 @@ open pull requests in the monorepo.
 
 ### Prerequisites
 
-- Node.js 20.18.1 or newer
+- Node.js 22 or newer (release CI uses Node.js 24)
 - npm
 
 ### Build from Source
@@ -128,9 +128,63 @@ braintrust-coding-agent-plugins/src/plugins/cursor/content/
 
 The monorepo's **Release Plugin** workflow prepares a version pull request.
 After that pull request is approved and merged, the workflow publishes the
-generated Cursor plugin tree to `braintrustdata/braintrust-cursor-extension`.
+generated Cursor plugin tree to `braintrustdata/braintrust-cursor-extension`
+and then packages and publishes `braintrustdata.braintrust` to
+[Open VSX](https://open-vsx.org/extension/braintrustdata/braintrust).
 The version script updates the Cursor plugin manifest, `package.json`, and
 `package-lock.json` together. Do not edit the distribution repository directly.
 
-Publishing the VS Code extension to an extension marketplace is a separate
-release action. `npm run package` creates a `.vsix` file for local testing.
+The Open VSX job checks out the exact approved merge commit, installs locked
+dependencies, and packages the extension with `npm run package`. It saves the
+VSIX as a workflow artifact before publishing that same file. Pull requests,
+release preparation, `test-release.yml`, and `make publish` do not publish to
+Open VSX. `npm run package` also creates a VSIX for local testing. Publishing
+to the VS Code Marketplace remains a separate action.
+
+### One-time Open VSX trusted publishing setup
+
+The workflow uses
+[Open VSX trusted publishing](https://github.com/eclipse-openvsx/openvsx/wiki/Trusted-Publishing)
+with GitHub Actions OIDC; it does not need an `OVSX_PAT` secret.
+
+1. In the **monorepo**, create the GitHub Actions environment `openvsx-cursor`
+   under **Settings → Environments**. The release PR's approval and merge remain
+   the authorization for publication; required environment reviewers are
+   optional if you want an additional approval before the Open VSX job runs.
+   Restrict deployment branches to `main`: for this merged `pull_request`
+   event, GitHub sets the workflow ref to `refs/heads/main`.
+2. Sign in to Open VSX as an **owner** of the `braintrustdata` namespace and
+   ensure that account has signed the Publisher Agreement. Contributor access
+   is insufficient to register a trusted publisher.
+3. Open [Settings → Trusted Publishers](https://open-vsx.org/user-settings/trusted-publishers),
+   select the `braintrustdata` namespace and `braintrust` extension, and register
+   **GitHub Actions** with these exact values:
+
+   | Field | Value |
+   |---|---|
+   | Organization or User name | `braintrustdata` |
+   | Repository name | `braintrust-coding-agent-plugins` |
+   | Workflow filename | `release.yml` |
+   | Environment name | `openvsx-cursor` |
+
+   Register the monorepo workflow, rather than the generated distribution
+   repository or `_release.yml`. Merge this workflow into `main` before
+   registering it. The extension must have at least one active published
+   version; if it has none, a namespace owner must publish an initial version
+   with an access token before registration is possible. The package's
+   `publisher` must match the namespace's casing exactly (`braintrustdata`).
+4. Keep `OVSX_PAT` out of the publishing job: an access token takes precedence
+   over OIDC, even with `--trusted-publishing`. Existing Braintrust Bot secrets
+   still handle distribution-repository deployment; no additional publishing
+   secret is needed for Open VSX.
+
+### Recovering a failed Open VSX publish
+
+Fix the environment or trusted-publisher registration, then choose **Re-run
+failed jobs** on the **Publish …** run in Release Plugin. The Open VSX job is
+separate from distribution publication, so successfully completed tag and
+deployment jobs are preserved. Re-running all jobs after the distribution
+release succeeded fails its existing-tag check. Do not prepare another release
+PR for the already-merged version. If an upload succeeded despite a reported
+failure, check the published version before retrying; duplicate Open VSX
+versions are rejected.
