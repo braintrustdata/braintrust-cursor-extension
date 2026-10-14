@@ -1,10 +1,11 @@
 #!/bin/sh
 # Cursor consumes stdout as a policy response. Never expose bt output there.
 # Keep the original native JSON on stdin; the daemon owns all interpretation.
-BT_BIN="${BT_BIN:-bt}"
-if command -v "$BT_BIN" >/dev/null 2>&1; then
+# BT_BIN is the deprecated name of BRAINTRUST_BT_BIN.
+bt_bin="${BRAINTRUST_BT_BIN:-${BT_BIN:-bt}}"
+if command -v "$bt_bin" >/dev/null 2>&1; then
   # Leave time to emit the policy response before Cursor's 10-second timeout.
-  if ! "$BT_BIN" trace hook --source cursor \
+  if ! "$bt_bin" trace hook --source cursor \
     --session-id-field conversation_id --event-field hook_event_name \
     --transcript-path-field transcript_path --flush-on-turn-end \
     --capture-timeout-ms 8000 \
