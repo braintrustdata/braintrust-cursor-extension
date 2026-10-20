@@ -22,6 +22,14 @@
         "failClosed": false
       }
     ],
+    "preToolUse": [
+      {
+        "command": "bt trace hook --source cursor --event preToolUse --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false,
+        "matcher": "Task"
+      }
+    ],
     "postToolUse": [
       {
         "command": "bt trace hook --source cursor --event postToolUse --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
@@ -32,6 +40,13 @@
     "postToolUseFailure": [
       {
         "command": "bt trace hook --source cursor --event postToolUseFailure --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
+        "timeout": 10,
+        "failClosed": false
+      }
+    ],
+    "subagentStart": [
+      {
+        "command": "bt trace hook --source cursor --event subagentStart --session-id-field conversation_id --event-field hook_event_name --transcript-path-field transcript_path --flush-on-turn-end --capture-timeout-ms 8000",
         "timeout": 10,
         "failClosed": false
       }
