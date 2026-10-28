@@ -40,6 +40,8 @@ Cursor's `PATH` when hooks run. `bt trace enable cursor` also installs capture
 hooks in `~/.cursor/hooks.json`. These user hooks work with third-party imports
 disabled and when a marketplace installation takes precedence over the local
 plugin. Plugin hooks skip capture for events covered by these user hooks.
+The Braintrust Claude Code plugin exposes no hooks when Cursor imports it;
+Cursor tracing uses this integration's native hooks.
 
 ## Quickstart
 
