@@ -12,7 +12,7 @@ the Braintrust VS Code extension for Cursor.
 
 - A [Braintrust account](https://braintrust.dev)
 - Cursor with the CLI or desktop app
-- The [Braintrust CLI](https://www.braintrust.dev/docs/reference/cli/quickstart)
+- The [Braintrust CLI](https://docs.braintrust.dev/reference/cli/quickstart)
 - A Braintrust API key to use the MCP server
 
 ## Install from Cursor Marketplace
